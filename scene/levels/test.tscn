@@ -13,6 +13,11 @@ transform = Transform3D(1, 0, 0, 0, -0.5893197, 0.80789995, 0, -0.80789995, -0.5
 
 [node name="Node3D" parent="." unique_id=560182011 instance=ExtResource("1_kn7c7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.077324, -132.20721)
+min_speed = 1.0
+pitch_speed = 0.9
+roll_inertia = 0.6
+yaw_speed = 0.7
+yaw_inertia = 1.2
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1795659489]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4971457, 0)
