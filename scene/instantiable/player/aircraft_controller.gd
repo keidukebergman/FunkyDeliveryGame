@@ -1,4 +1,9 @@
 extends CharacterBody3D
+
+@export_group("Control inertia")
+@export var throttle_increase_per_second: float = 2;
+var throttle = 0; 
+
 @export_group("Base Flight Parameters")
 @export var min_speed: float = 15.0
 @export var max_level_speed: float = 60.0
@@ -23,27 +28,34 @@ extends CharacterBody3D
 @export var current_yaw_speed = 0
 
 var current_speed: float = 30.0
+
+var actual_movement_speed: Vector3
+var movement_speed_interpolation: float = 10
+
+func _process(delta: float) -> void:
+	var throttle_input = Input.get_axis("throttle_down", "throttle_up") ;
+	throttle = (throttle_input + 1)/2 
+	throttle = clamp(throttle, 0, 1);
+	print(throttle);
+	
 func _physics_process(delta: float) -> void:
 	handle_rotation(delta)
 	calculate_flight_physics(delta)
-
-	# Calculate velocity vector along local forward axis (-Z)
-	var forward_dir = -transform.basis.z
-	velocity = forward_dir * current_speed
-
+	velocity = actual_movement_speed;
 	move_and_slide()
 
 func calculate_flight_physics(delta: float) -> void:
+	# Idea! split velocity into two calculations: speed along 
+	# movement direction and gravity. Make the gravity factor increase
+	# as movement speed lowers, creating "stall". 
+	# the movement speed vector should be moving towards the forward direction
 	var forward_dir = -transform.basis.z
-	
 	var pitch_attitude = forward_dir.dot(Vector3.UP)
-	
-	var throttle_input = Input.get_axis("throttle_down", "throttle_up")
-	var acceleration = throttle_input * engine_power
-	
-	var dynamic_max_speed = max_level_speed
+	var acceleration = throttle * engine_power
+	var dynamic_max_speed = max_level_speed - gravity_pull;
 		
-	current_speed = clamp(current_speed, min_speed, dynamic_max_speed)
+		
+	actual_movement_speed = actual_movement_speed.move_toward(forward_dir * throttle*max_level_speed, delta * 60);
 
 func handle_rotation(delta: float) -> void:
 	var pitch_input = Input.get_axis("pitch_down", "pitch_up")
