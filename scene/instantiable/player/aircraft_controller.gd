@@ -30,12 +30,16 @@ var throttle = 0;
 var current_speed: float = 30.0
 
 var actual_movement_speed: Vector3
-var movement_speed_interpolation: float = 10
+
+@export_group("Force Interpolation")
+var idle_movement_speed_interpolation: float = 60
+var normal_movement_speed_interpolation: float = 90
+var boost_movement_speed_interpolation: float = 120
 
 func _process(delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up") ;
-	throttle = (throttle_input + 1)/2 
-	throttle = clamp(throttle, 0, 1);
+	throttle = throttle_input + 1 
+	throttle = clamp(throttle, 0, 2)
 	print(throttle);
 	
 func _physics_process(delta: float) -> void:
@@ -54,8 +58,8 @@ func calculate_flight_physics(delta: float) -> void:
 	var acceleration = throttle * engine_power
 	var dynamic_max_speed = max_level_speed - gravity_pull;
 		
-		
-	actual_movement_speed = actual_movement_speed.move_toward(forward_dir * throttle*max_level_speed, delta * 60);
+	var interpolation_speed = boost_movement_speed_interpolation if throttle == 2 else (normal_movement_speed_interpolation if throttle == 1 else idle_movement_speed_interpolation)
+	actual_movement_speed = actual_movement_speed.move_toward(forward_dir * throttle * max_level_speed, delta * interpolation_speed);
 
 func handle_rotation(delta: float) -> void:
 	var pitch_input = Input.get_axis("pitch_down", "pitch_up")
