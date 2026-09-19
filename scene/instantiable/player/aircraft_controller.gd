@@ -16,6 +16,8 @@ var throttle = 0;
 @export var climb_penalty_mult: float = 1.5 # Extra drag when climbing steeply
 
 @export_group("Rotation Speeds")
+@export var no_thrust_control_factor = 1.5
+@export var boost_control_factor = 0.7
 @export var pitch_speed: float = 1.5
 @export var pitch_inertia: float = 1.2
 @export var roll_speed: float = 2.5
@@ -23,18 +25,17 @@ var throttle = 0;
 @export var yaw_speed: float = 0.75
 @export var yaw_inertia: float = 1.1
 
-@export var current_pitch_speed = 0
-@export var current_roll_speed = 0
-@export var current_yaw_speed = 0
+var current_pitch_speed = 0
+var current_roll_speed = 0
+var current_yaw_speed = 0
 
 var current_speed: float = 30.0
-
 var actual_movement_speed: Vector3
 
 @export_group("Force Interpolation")
-var idle_movement_speed_interpolation: float = 60
-var normal_movement_speed_interpolation: float = 90
-var boost_movement_speed_interpolation: float = 120
+@export var idle_movement_speed_interpolation: float = 10
+@export var normal_movement_speed_interpolation: float = 90
+@export var boost_movement_speed_interpolation: float = 120
 
 func _process(delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up") ;
@@ -63,13 +64,17 @@ func calculate_flight_physics(delta: float) -> void:
 
 func handle_rotation(delta: float) -> void:
 	var pitch_input = Input.get_axis("pitch_down", "pitch_up")
-	var roll_input = Input.get_axis("roll_right", "roll_left")
+	var roll_input = -Input.get_axis("roll_right", "roll_left")
 	var yaw_input = Input.get_axis("yaw_right", "yaw_left")
 	
-	current_pitch_speed = move_toward(current_pitch_speed, pitch_input*pitch_speed, delta*pitch_inertia);
-	current_roll_speed = move_toward(current_roll_speed, roll_input*roll_speed, delta*roll_inertia);
-	current_yaw_speed = move_toward(current_yaw_speed, yaw_input*yaw_speed, delta*yaw_inertia);
+	var control_factor = 1 if throttle == 1 else (boost_control_factor if throttle == 2 else no_thrust_control_factor)
 	
-	rotate_object_local(Vector3.RIGHT, current_pitch_speed * pitch_speed * delta)
+	current_pitch_speed = move_toward(current_pitch_speed, pitch_input*pitch_speed*control_factor, delta*pitch_inertia);
+	current_roll_speed = move_toward(current_roll_speed, roll_input*roll_speed*control_factor, delta*roll_inertia);
+	current_yaw_speed = move_toward(current_yaw_speed, yaw_input*yaw_speed*control_factor, delta*yaw_inertia);
+	
+	
+	
+	rotate_object_local(Vector3.RIGHT, (current_pitch_speed * pitch_speed) * delta)
 	rotate_object_local(Vector3.FORWARD, current_roll_speed * roll_speed * delta)
 	rotate_object_local(Vector3.UP, current_yaw_speed * yaw_speed * delta)

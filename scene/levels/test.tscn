@@ -3,10 +3,28 @@
 [ext_resource type="Texture2D" uid="uid://bjbxd22a1md3a" path="res://icon.svg" id="1_2mwat"]
 [ext_resource type="PackedScene" uid="uid://cephtpdf2eueo" path="res://scene/instantiable/player/node_3d.tscn" id="1_kn7c7"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_kn7c7"]
+
+[sub_resource type="Sky" id="Sky_llb1u"]
+sky_material = SubResource("ProceduralSkyMaterial_kn7c7")
+
+[sub_resource type="Environment" id="Environment_x05w2"]
+background_mode = 2
+sky = SubResource("Sky_llb1u")
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_mtnme"]
+
+[sub_resource type="Compositor" id="Compositor_ix5x4"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kn7c7"]
 albedo_texture = ExtResource("1_2mwat")
 
 [node name="Node3D" type="Node3D" unique_id=1261191356]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=994467903]
+environment = SubResource("Environment_x05w2")
+camera_attributes = SubResource("CameraAttributesPractical_mtnme")
+compositor = SubResource("Compositor_ix5x4")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1122917267]
 transform = Transform3D(1, 0, 0, 0, -0.5893197, 0.80789995, 0, -0.80789995, -0.5893197, 0, 0, 0)
@@ -14,10 +32,11 @@ transform = Transform3D(1, 0, 0, 0, -0.5893197, 0.80789995, 0, -0.80789995, -0.5
 [node name="Node3D" parent="." unique_id=560182011 instance=ExtResource("1_kn7c7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.077324, -132.20721)
 min_speed = 1.0
-pitch_speed = 1.2
+pitch_speed = 0.9
+pitch_inertia = 2.4
 roll_inertia = 0.9
-yaw_speed = 1.2
-yaw_inertia = 1.2
+yaw_speed = 0.6
+yaw_inertia = 2.4
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1795659489]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4971457, 0)
