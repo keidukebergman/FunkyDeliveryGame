@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://caijirtamwc8"]
+
+[ext_resource type="Script" uid="uid://7jg1qo5civf0" path="res://scene/instantiable/player/aircraft_controller_rigidbody.gd" id="1_qwjoj"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x05w2"]
+size = Vector3(1, 1, 3.1157227)
+
+[node name="Node3D2" type="RigidBody3D" unique_id=382606159]
+script = ExtResource("1_qwjoj")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1539687915]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0059509277, 0, -1.0155859)
+size = Vector3(0.604, 0.503, 3.246172)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1272113054]
+transform = Transform3D(1.3394789, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+size = Vector3(2.7373047, 0.1928711, 1)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=791159178]
+transform = Transform3D(0.8958891, 0, 0, 0, 0.59677994, 0, 0, 0, 0.65598476, 0, 0.132622, -2.1332)
+size = Vector3(2.7373047, 0.1928711, 1)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=762606495]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0578613)
+shape = SubResource("BoxShape3D_x05w2")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=86576317]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.445, 4.313)
+current = true

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bt7wc6tqnpsub"]
 
 [ext_resource type="Texture2D" uid="uid://bjbxd22a1md3a" path="res://icon.svg" id="1_2mwat"]
-[ext_resource type="PackedScene" uid="uid://cephtpdf2eueo" path="res://scene/instantiable/player/node_3d.tscn" id="2_mul6r"]
+[ext_resource type="PackedScene" uid="uid://cephtpdf2eueo" path="res://scene/instantiable/player/node_3d.tscn" id="1_kn7c7"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5gkb"]
 sky_top_color = Color(0.22121674, 0.4322499, 0.807532, 1)
@@ -32,10 +32,15 @@ compositor = SubResource("Compositor_ix5x4")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1122917267]
 transform = Transform3D(1, 0, 0, 0, -0.5893197, 0.80789995, 0, -0.80789995, -0.5893197, 0, 0, 0)
 
-[node name="Node3D" parent="." unique_id=1079979286 instance=ExtResource("2_mul6r")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1205845, 0, 0)
-slide_on_ceiling = false
-wall_min_slide_angle = 0.0
+[node name="Node3D" parent="." unique_id=560182011 instance=ExtResource("1_kn7c7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20.077324, -132.20721)
+min_speed = 1.0
+pitch_speed = 0.9
+pitch_inertia = 2.4
+roll_speed = 1.8
+roll_inertia = 2.9
+yaw_speed = 0.6
+yaw_inertia = 2.4
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1795659489]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4971457, 0)
