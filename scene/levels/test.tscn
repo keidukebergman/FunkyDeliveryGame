@@ -2,6 +2,9 @@
 
 [ext_resource type="Texture2D" uid="uid://bjbxd22a1md3a" path="res://icon.svg" id="1_2mwat"]
 [ext_resource type="PackedScene" uid="uid://cephtpdf2eueo" path="res://scene/instantiable/player/node_3d.tscn" id="2_mul6r"]
+[ext_resource type="Script" uid="uid://dv4daiqx174p3" path="res://scene/levels/aa_turret.gd" id="3_mul6r"]
+[ext_resource type="Script" uid="uid://buk3gsfs72vvv" path="res://scene/levels/targeting_module.gd" id="4_h5gkb"]
+[ext_resource type="Script" uid="uid://dsg8j5dxtvqbe" path="res://scene/levels/missile.gd" id="5_xe2e6"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5gkb"]
 sky_top_color = Color(0.22121674, 0.4322499, 0.807532, 1)
@@ -80,4 +83,37 @@ use_collision = true
 size = Vector3(300, 1, 300)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=209417441]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 289.3943, -123.47933)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.0619507, 41.107483, 9.3808365)
+
+[node name="AA_HK-Missile" type="Node3D" parent="." unique_id=225821480 node_paths=PackedStringArray("target", "turret", "targeting_module")]
+script = ExtResource("3_mul6r")
+target = NodePath("../Node3D")
+turret = NodePath("AA_turret")
+targeting_module = NodePath("targeting_module")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="AA_HK-Missile" unique_id=70426486]
+
+[node name="AA_turret" type="Node3D" parent="AA_HK-Missile" unique_id=882945852]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9502678, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="AA_HK-Missile/AA_turret" unique_id=894517141]
+size = Vector3(0.4, 0.4, 1)
+
+[node name="targeting_module" type="Node3D" parent="AA_HK-Missile" unique_id=1051923480 node_paths=PackedStringArray("target")]
+script = ExtResource("4_h5gkb")
+target = NodePath("../../Node3D")
+aim_at_next_pos = true
+
+[node name="Missile" type="Node3D" parent="." unique_id=1030628994 node_paths=PackedStringArray("targeting_module")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2683554, 1.8561747, 0)
+script = ExtResource("5_xe2e6")
+movement_speed = 5
+targeting_module = NodePath("targeting_module")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Missile" unique_id=1973069446]
+size = Vector3(0.5, 0.5, 1)
+
+[node name="targeting_module" type="Node3D" parent="Missile" unique_id=742991813 node_paths=PackedStringArray("target")]
+script = ExtResource("4_h5gkb")
+target = NodePath("../../Node3D")
+aim_at_next_pos = true
