@@ -105,7 +105,7 @@ func handle_hovering(delta:float) -> void:
 	actual_hover_speed = actual_hover_speed.move_toward(hover_speed, hover_force*delta)
 	
 func start_falling(delta:float, factor:float) -> void:
-	actual_fall_speed.y = max(actual_fall_speed.y, -99999)
+	actual_fall_speed.y = max(actual_fall_speed.y, velocity.y)
 	actual_fall_speed.y = clamp(actual_fall_speed.y, -200, 0)
 	actual_fall_speed -= delta * factor * 12 * Vector3.UP * clamp((stall_speed - actual_movement_speed.length())/stall_speed, 0, 1);
 

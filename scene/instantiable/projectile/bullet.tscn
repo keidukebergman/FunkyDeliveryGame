@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dawtkjmagnku3"]
+
+[ext_resource type="Script" uid="uid://drw8n8my0je6h" path="res://scene/instantiable/projectile/bullet.gd" id="1_ls8rx"]
+[ext_resource type="Script" uid="uid://fok8v1b1rllw" path="res://scene/instantiable/projectile/ProjectileAttackHandler.gd" id="2_ag82t"]
+[ext_resource type="Script" uid="uid://bpng540ygsvjm" path="res://scripts/Hitbox.gd" id="3_ua6f8"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jjsvy"]
+size = Vector3(0.5, 0.5, 1)
+
+[node name="Bullet" type="Node3D" unique_id=62765620]
+script = ExtResource("1_ls8rx")
+projectile_speed = 200
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=957035234]
+size = Vector3(0.5, 0.5, 1)
+
+[node name="ProjectileAttackHandler" type="Node3D" parent="." unique_id=1315943970 node_paths=PackedStringArray("root", "hitbox")]
+script = ExtResource("2_ag82t")
+root = NodePath("..")
+hitbox = NodePath("../Hitbox")
+
+[node name="Hitbox" type="Area3D" parent="." unique_id=1861192764]
+script = ExtResource("3_ua6f8")
+metadata/_custom_type_script = "uid://bpng540ygsvjm"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=680857]
+shape = SubResource("BoxShape3D_jjsvy")

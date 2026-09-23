@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cck8jdrnjw0k8"]
+
+[ext_resource type="Script" uid="uid://bf6kk3e7r5gw5" path="res://scene/instantiable/projectile/FlakClusterShell.gd" id="1_rxd2v"]
+[ext_resource type="PackedScene" uid="uid://c12vbsgx7a127" path="res://scene/instantiable/projectile/bomblet.tscn" id="2_ono11"]
+[ext_resource type="PackedScene" uid="uid://deetp6rbm42tg" path="res://scene/instantiable/explosion.tscn" id="3_ono11"]
+
+[node name="FlakBullet" type="Node3D" unique_id=62765620]
+script = ExtResource("1_rxd2v")
+cluster_bomblet = ExtResource("2_ono11")
+projectile_speed = 90
+on_destroy_instance = ExtResource("3_ono11")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=957035234]
+size = Vector3(1, 1, 3)

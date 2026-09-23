@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bs7c50bgirlno"]
+
+[ext_resource type="Script" uid="uid://dsg8j5dxtvqbe" path="res://scene/levels/missile.gd" id="1_wcfkk"]
+[ext_resource type="Script" uid="uid://buk3gsfs72vvv" path="res://scene/levels/targeting_module.gd" id="2_s0k68"]
+
+[node name="Missile" type="Node3D" unique_id=1463007669 node_paths=PackedStringArray("targeting_module")]
+script = ExtResource("1_wcfkk")
+movement_speed = 30
+targeting_module = NodePath("targeting_module")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1449968798]
+size = Vector3(0.5, 0.5, 1)
+
+[node name="targeting_module" type="Node3D" parent="." unique_id=1470962491 node_paths=PackedStringArray("target")]
+script = ExtResource("2_s0k68")
+target = NodePath("")

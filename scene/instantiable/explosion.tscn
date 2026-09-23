@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://deetp6rbm42tg"]
+
+[ext_resource type="Script" uid="uid://bbyfw8c46t5ol" path="res://scene/levels/Explosion.gd" id="1_0gbs7"]
+
+[node name="Explosion" type="Node3D" unique_id=618794738]
+script = ExtResource("1_0gbs7")
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="." unique_id=1059149383]
+radius = 4.0

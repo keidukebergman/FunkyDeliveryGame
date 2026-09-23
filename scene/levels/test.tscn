@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cephtpdf2eueo" path="res://scene/instantiable/player/node_3d.tscn" id="2_mul6r"]
 [ext_resource type="Script" uid="uid://dv4daiqx174p3" path="res://scene/levels/aa_turret.gd" id="3_mul6r"]
 [ext_resource type="Script" uid="uid://buk3gsfs72vvv" path="res://scene/levels/targeting_module.gd" id="4_h5gkb"]
-[ext_resource type="Script" uid="uid://dsg8j5dxtvqbe" path="res://scene/levels/missile.gd" id="5_xe2e6"]
+[ext_resource type="PackedScene" uid="uid://dawtkjmagnku3" path="res://scene/instantiable/projectile/bullet.tscn" id="6_3i5di"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5gkb"]
 sky_top_color = Color(0.22121674, 0.4322499, 0.807532, 1)
@@ -35,10 +35,18 @@ compositor = SubResource("Compositor_ix5x4")
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1122917267]
 transform = Transform3D(1, 0, 0, 0, -0.5893197, 0.80789995, 0, -0.80789995, -0.5893197, 0, 0, 0)
 
-[node name="Node3D" parent="." unique_id=1079979286 instance=ExtResource("2_mul6r")]
+[node name="Aircraft" parent="." unique_id=1079979286 instance=ExtResource("2_mul6r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.1205845, 0, 0)
 slide_on_ceiling = false
 wall_min_slide_angle = 0.0
+max_hover_speed = 7
+min_hover_speed = -8
+pitch_speed = 1.0
+pitch_inertia = 1.5
+roll_inertia = 3.0
+yaw_inertia = 3.0
+normal_movement_speed_interpolation = 120.0
+boost_movement_speed_interpolation = 180.0
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1795659489]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.4971457, 0)
@@ -85,35 +93,24 @@ size = Vector3(300, 1, 300)
 [node name="Camera3D" type="Camera3D" parent="." unique_id=209417441]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.0619507, 41.107483, 9.3808365)
 
-[node name="AA_HK-Missile" type="Node3D" parent="." unique_id=225821480 node_paths=PackedStringArray("target", "turret", "targeting_module")]
+[node name="AA_HK-Bullet" type="Node3D" parent="." unique_id=520120313 node_paths=PackedStringArray("target", "turret", "targeting_module")]
 script = ExtResource("3_mul6r")
-target = NodePath("../Node3D")
+target = NodePath("../Aircraft")
 turret = NodePath("AA_turret")
 targeting_module = NodePath("targeting_module")
+projectile = ExtResource("6_3i5di")
+firing_timeout = 0.03
+airburst = false
 
-[node name="CSGBox3D" type="CSGBox3D" parent="AA_HK-Missile" unique_id=70426486]
+[node name="CSGBox3D" type="CSGBox3D" parent="AA_HK-Bullet" unique_id=1636965279]
 
-[node name="AA_turret" type="Node3D" parent="AA_HK-Missile" unique_id=882945852]
+[node name="AA_turret" type="Node3D" parent="AA_HK-Bullet" unique_id=1350250148]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9502678, 0)
 
-[node name="CSGBox3D" type="CSGBox3D" parent="AA_HK-Missile/AA_turret" unique_id=894517141]
+[node name="CSGBox3D" type="CSGBox3D" parent="AA_HK-Bullet/AA_turret" unique_id=1721813812]
 size = Vector3(0.4, 0.4, 1)
 
-[node name="targeting_module" type="Node3D" parent="AA_HK-Missile" unique_id=1051923480 node_paths=PackedStringArray("target")]
+[node name="targeting_module" type="Node3D" parent="AA_HK-Bullet" unique_id=2139761901 node_paths=PackedStringArray("target")]
 script = ExtResource("4_h5gkb")
-target = NodePath("../../Node3D")
-aim_at_next_pos = true
-
-[node name="Missile" type="Node3D" parent="." unique_id=1030628994 node_paths=PackedStringArray("targeting_module")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2683554, 1.8561747, 0)
-script = ExtResource("5_xe2e6")
-movement_speed = 5
-targeting_module = NodePath("targeting_module")
-
-[node name="CSGBox3D" type="CSGBox3D" parent="Missile" unique_id=1973069446]
-size = Vector3(0.5, 0.5, 1)
-
-[node name="targeting_module" type="Node3D" parent="Missile" unique_id=742991813 node_paths=PackedStringArray("target")]
-script = ExtResource("4_h5gkb")
-target = NodePath("../../Node3D")
+target = NodePath("../../Aircraft")
 aim_at_next_pos = true
