@@ -17,7 +17,7 @@ func _process(delta: float) -> void:
 	var yaw = atan2(-dir.x, -dir.z)
 	var pitch = atan2(dir.y, Vector2(dir.x, dir.z).length()) 
 	turret.rotation = Vector3(pitch, yaw, 0.0)
-	
+
 	firing_timeout -= delta
 	if firing_timeout <= 0:
 		firing_timeout = 0.03

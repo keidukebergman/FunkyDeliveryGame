@@ -1,4 +1,4 @@
-class_name AttackData
+class_name AttackData extends Resource
 
 var damage : float = 0
 var attacker : Node3D

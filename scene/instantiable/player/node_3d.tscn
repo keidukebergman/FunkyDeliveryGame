@@ -49,3 +49,5 @@ script = ExtResource("3_i6rrb")
 health = 50.0
 max_health = 50.0
 metadata/_custom_type_script = "uid://br2sexdynpvob"
+
+[node name="AttackRegistrator" type="Node3D" parent="." unique_id=965883723]

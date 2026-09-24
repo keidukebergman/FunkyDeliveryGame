@@ -1,5 +1,6 @@
 extends CharacterBody3D
 
+@export var data = CombatantData.new()
 @export_group("Control inertia")
 @export var throttle_increase_per_second: float = 2;
 var throttle = 0; 
