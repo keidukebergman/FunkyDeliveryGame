@@ -1,7 +1,7 @@
 extends Node3D 
 class_name TargetingModule
 
-@export var target:CharacterBody3D
+@export var target:Node3D
 @export var aim_at_next_pos:bool = false
 @export var projectile_speed_factor: float = 200
 
@@ -40,10 +40,9 @@ func get_linear_intercept_time(offset = Vector3.ZERO) -> float:
 	return t
 
 func get_linear_target_position(offset = Vector3.ZERO) -> Vector3:
-	if aim_at_next_pos == false:
+	if aim_at_next_pos == false || (target as CharacterBody3D) == null:
 		return target.global_position
 	var t = get_linear_intercept_time()
 	if t < 0.0:
 		return target.global_position + offset
-	
 	return target.global_position + target.velocity * t

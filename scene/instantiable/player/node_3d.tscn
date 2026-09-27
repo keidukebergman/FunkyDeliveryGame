@@ -1,7 +1,9 @@
 [gd_scene format=3 uid="uid://cephtpdf2eueo"]
 
 [ext_resource type="Script" uid="uid://cyreosrsvpso4" path="res://scene/instantiable/player/aircraft_controller.gd" id="1_k1gms"]
+[ext_resource type="Script" uid="uid://0f173b8nkb76" path="res://scene/instantiable/player/MissileTarget.gd" id="2_4v0pv"]
 [ext_resource type="Script" uid="uid://b1olin0wr7hu6" path="res://scripts/Hurtbox.gd" id="2_87d5p"]
+[ext_resource type="Script" uid="uid://be0jh52rd15gj" path="res://scene/instantiable/player/MissileCounterMeasures.gd" id="3_8c50t"]
 [ext_resource type="Script" uid="uid://br2sexdynpvob" path="res://scripts/HealthManager.gd" id="3_i6rrb"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_x05w2"]
@@ -10,10 +12,27 @@ size = Vector3(1, 1, 3.1157227)
 [sub_resource type="BoxShape3D" id="BoxShape3D_mtnme"]
 size = Vector3(3, 0.4, 2.644)
 
-[node name="Node3D" type="CharacterBody3D" unique_id=1079979286]
+[node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures")]
 script = ExtResource("1_k1gms")
 roll_speed = 1.0
-yaw_speed = 1.0
+yaw_speed = 0.6
+yaw_inertia = 0.2
+countermeasures = NodePath("MissileCountermeasures")
+
+[node name="MissileTarget" type="Node3D" parent="." unique_id=1757459258]
+script = ExtResource("2_4v0pv")
+
+[node name="MissileCountermeasures" type="Node3D" parent="." unique_id=975760687 node_paths=PackedStringArray("missile_target")]
+script = ExtResource("3_8c50t")
+missile_target = NodePath("../MissileTarget")
+
+[node name="AttackRegistrator" type="Node3D" parent="." unique_id=965883723]
+
+[node name="HealthManager" type="Node3D" parent="." unique_id=1736362127]
+script = ExtResource("3_i6rrb")
+health = 50.0
+max_health = 50.0
+metadata/_custom_type_script = "uid://br2sexdynpvob"
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1543224469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0059509277, 0, -1.0155859)
@@ -43,11 +62,3 @@ metadata/_custom_type_script = "uid://b1olin0wr7hu6"
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8222046)
 shape = SubResource("BoxShape3D_mtnme")
 debug_color = Color(0, 1, 0.16862746, 1)
-
-[node name="HealthManager" type="Node3D" parent="." unique_id=1736362127]
-script = ExtResource("3_i6rrb")
-health = 50.0
-max_health = 50.0
-metadata/_custom_type_script = "uid://br2sexdynpvob"
-
-[node name="AttackRegistrator" type="Node3D" parent="." unique_id=965883723]

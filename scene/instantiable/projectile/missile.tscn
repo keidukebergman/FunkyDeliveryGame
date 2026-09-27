@@ -3,14 +3,57 @@
 [ext_resource type="Script" uid="uid://dsg8j5dxtvqbe" path="res://scene/levels/missile.gd" id="1_wcfkk"]
 [ext_resource type="Script" uid="uid://buk3gsfs72vvv" path="res://scene/levels/targeting_module.gd" id="2_s0k68"]
 
-[node name="Missile" type="Node3D" unique_id=1463007669 node_paths=PackedStringArray("targeting_module")]
+[sub_resource type="Curve" id="Curve_uo4qw"]
+_data = [Vector2(0.00946372, 1), 0.0, 0.0, 0, 0, Vector2(0.7981072, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_s0k68"]
+curve = SubResource("Curve_uo4qw")
+
+[sub_resource type="Curve" id="Curve_wcfkk"]
+_data = [Vector2(0, 0.34591192), 0.0, 0.0, 0, 0, Vector2(0.57097787, 0.67924523), 0.9968554, 0.9968554, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_wcfkk"]
+curve = SubResource("Curve_wcfkk")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_x05w2"]
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 0.08, 0)
+scale_curve = SubResource("CurveTexture_wcfkk")
+alpha_curve = SubResource("CurveTexture_s0k68")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0j5k"]
+transparency = 1
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_mtnme"]
+material = SubResource("StandardMaterial3D_a0j5k")
+
+[node name="Missile" type="RigidBody3D" unique_id=1547750135 node_paths=PackedStringArray("targeting_module")]
+gravity_scale = 0.0
 script = ExtResource("1_wcfkk")
-movement_speed = 30
+movement_speed = 180
+rotation_speed = 10.0
 targeting_module = NodePath("targeting_module")
+rotation_loss = 0.3
+rotation_loss_distance = 80
+dot_rotation_loss_guard = 0.0
+dot_rotation_loss_max = 0.5
+dot_loss_power = 1.5
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1449968798]
 size = Vector3(0.5, 0.5, 1)
 
-[node name="targeting_module" type="Node3D" parent="." unique_id=1470962491 node_paths=PackedStringArray("target")]
+[node name="targeting_module" type="Node3D" parent="." unique_id=1470962491]
 script = ExtResource("2_s0k68")
-target = NodePath("")
+aim_at_next_pos = true
+projectile_speed_factor = 150.0
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=44983150]
+amount = 25
+process_material = SubResource("ParticleProcessMaterial_x05w2")
+draw_pass_1 = SubResource("QuadMesh_mtnme")

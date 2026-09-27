@@ -1,5 +1,5 @@
 extends Node3D
-class_name GunTurret
+class_name MissileTurret
 
 @export var target:CharacterBody3D
 @export var turret:Node3D
@@ -7,8 +7,6 @@ class_name GunTurret
 @export var targeting_module:TargetingModule
 @export var projectile:PackedScene
 @export var firing_timeout = 0.6
-@export var airburst:bool = true
-@export var forward_offset:float = 30
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -20,14 +18,15 @@ func _process(delta: float) -> void:
 
 	firing_timeout -= delta
 	if firing_timeout <= 0:
-		firing_timeout = 0.03
-		fire_projectile()
+		firing_timeout = 5
+		for n in 10:
+			await get_tree().create_timer(0.1).timeout
+			fire_projectile()
 
 func fire_projectile():
-	var projinstance = projectile.instantiate() as Bullet
+	var projinstance = projectile.instantiate() as Missile
 	add_child(projinstance)
 	projinstance.global_position = turret.global_position
-	projinstance.global_rotation = turret.global_rotation + Vector3(deg_to_rad(randf_range(-2, 2)), deg_to_rad(randf_range(-2, 2)), deg_to_rad(randf_range(-2, 2)))
-	if airburst:
-		var t = targeting_module.get_linear_intercept_time()
-		projinstance.lifetime = clamp(t+randf_range(-0.5, 0.5), 0, 10)
+	projinstance.global_rotation = turret.global_rotation + Vector3(deg_to_rad(randf_range(-12, 12)), deg_to_rad(randf_range(-12, 12)), deg_to_rad(randf_range(-12, 12)))
+	print(target.get_child(0))
+	projinstance.set_target(target)

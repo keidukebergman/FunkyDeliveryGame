@@ -104,7 +104,6 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.06
 doppler_tracking = 2
 
 [node name="AA_HK-Bullet" type="Node3D" parent="." unique_id=520120313 node_paths=PackedStringArray("target", "turret", "targeting_module")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9999, 0)
 script = ExtResource("3_mul6r")
 target = NodePath("../Aircraft")
 turret = NodePath("Turret")
@@ -149,7 +148,8 @@ size = Vector3(0.4, 0.4, 1)
 [node name="TargetingModule" type="Node3D" parent="AA_HK-Missille" unique_id=1106789514 node_paths=PackedStringArray("target")]
 script = ExtResource("4_h5gkb")
 target = NodePath("../../Aircraft")
-projectile_speed_factor = 100.0
+aim_at_next_pos = true
+projectile_speed_factor = 400.0
 
 [node name="AggroManager" type="Node3D" parent="AA_HK-Missille" unique_id=1749931531]
 script = ExtResource("6_lgk5j")

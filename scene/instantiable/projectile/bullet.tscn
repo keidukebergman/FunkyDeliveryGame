@@ -4,15 +4,22 @@
 [ext_resource type="Script" uid="uid://fok8v1b1rllw" path="res://scene/instantiable/projectile/ProjectileAttackHandler.gd" id="2_ag82t"]
 [ext_resource type="Script" uid="uid://bpng540ygsvjm" path="res://scripts/Hitbox.gd" id="3_ua6f8"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8c50t"]
+albedo_color = Color(1, 0.581802, 0.40942788, 1)
+emission_enabled = true
+emission = Color(1, 0.59607846, 0, 1)
+rim_enabled = true
+rim = 0.65
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_jjsvy"]
 size = Vector3(0.5, 0.5, 1)
 
 [node name="Bullet" type="Node3D" unique_id=62765620]
 script = ExtResource("1_ls8rx")
-projectile_speed = 200
 
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=957035234]
-size = Vector3(0.5, 0.5, 1)
+[node name="CSGBox3D" type="CSGCylinder3D" parent="." unique_id=579832710]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+material = SubResource("StandardMaterial3D_8c50t")
 
 [node name="ProjectileAttackHandler" type="Node3D" parent="." unique_id=1315943970 node_paths=PackedStringArray("root", "hitbox")]
 script = ExtResource("2_ag82t")
