@@ -72,20 +72,19 @@ func _physics_process(delta: float) -> void:
 
 func calculate_flight_physics(delta: float) -> void:
 	var forward_dir = -transform.basis.z
-	var pitch_attitude = forward_dir.dot(Vector3.UP)
-	var acceleration = throttle * engine_power
-	var hover_speed = up_direction * throttle 
 	var interpolation_speed = boost_movement_speed_interpolation if throttle == 2 else (normal_movement_speed_interpolation if throttle == 1 else idle_movement_speed_interpolation)
 	var flight_speed = forward_dir * throttle * max_level_speed;
 	actual_movement_speed = actual_movement_speed.move_toward(flight_speed, delta * interpolation_speed);
-	hover_speed = hover_speed.move_toward(Vector3.ZERO, delta*boost_movement_speed_interpolation)
+	actual_hover_speed = actual_hover_speed.move_toward(Vector3.ZERO, delta*boost_movement_speed_interpolation)
 	if (actual_movement_speed.length() < stall_speed):
 		print("Stalling: ", actual_movement_speed.length(), " : ", stall_speed)
 		actual_fall_speed.y = max(actual_fall_speed.y, -99999)
 		actual_fall_speed.y = clamp(actual_fall_speed.y, -200, 0)
 		actual_fall_speed -= delta * 12 * Vector3.UP * clamp((stall_speed - actual_movement_speed.length())/stall_speed, 0, 1);
 	else:
-		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, normal_movement_speed_interpolation*delta)    
+		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, normal_movement_speed_interpolation*delta)
+		if throttle != 0:
+			actual_fall_speed = Vector3.ZERO    
 	
 func handle_hovering(delta:float) -> void:
 	actual_movement_speed = actual_movement_speed.move_toward(Vector3.ZERO, idle_movement_speed_interpolation*delta)
