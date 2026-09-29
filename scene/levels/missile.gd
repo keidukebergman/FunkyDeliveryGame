@@ -1,5 +1,7 @@
 class_name Missile extends RigidBody3D
 
+@export var projectile_attack_handler: ProjectileAttackHandler
+
 @export var movement_speed = 10
 @export var rotation_speed:float = 1.0
 @export var targeting_module:TargetingModule
@@ -16,7 +18,8 @@ var initialized = false
 
 func _ready() -> void:
 	initialized = true
-	
+	projectile_attack_handler.applied_attack.connect(_on_hit)
+
 func set_target(target:Node3D):
 	self.target = target
 	targeting_module.target = target
@@ -74,3 +77,8 @@ func _PN_targeting(delta: float) -> void:
 
 	if (target.global_position - global_position).dot(-transform.basis.z) < tracking_loss_value:
 		target = null
+
+
+func _on_hit():
+	print("hit!")
+	queue_free()

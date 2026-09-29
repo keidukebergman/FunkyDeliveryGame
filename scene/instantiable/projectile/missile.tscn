@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dsg8j5dxtvqbe" path="res://scene/levels/missile.gd" id="1_wcfkk"]
 [ext_resource type="Script" uid="uid://buk3gsfs72vvv" path="res://scene/levels/targeting_module.gd" id="2_s0k68"]
 [ext_resource type="Script" uid="uid://bpng540ygsvjm" path="res://scripts/Hitbox.gd" id="3_s0k68"]
+[ext_resource type="Script" uid="uid://fok8v1b1rllw" path="res://scene/instantiable/projectile/ProjectileAttackHandler.gd" id="4_uo4qw"]
 
 [sub_resource type="Curve" id="Curve_uo4qw"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -49,16 +50,17 @@ size = Vector2(100, 100)
 [sub_resource type="BoxShape3D" id="BoxShape3D_x05w2"]
 size = Vector3(0.4, 0.4, 1)
 
-[node name="Missile" type="RigidBody3D" unique_id=1547750135 node_paths=PackedStringArray("targeting_module")]
+[node name="Missile" type="RigidBody3D" unique_id=1547750135 node_paths=PackedStringArray("projectile_attack_handler", "targeting_module")]
 gravity_scale = 0.0
 script = ExtResource("1_wcfkk")
+projectile_attack_handler = NodePath("ProjectileAttackHandler")
 movement_speed = 180
-rotation_speed = 10.0
+rotation_speed = 8.0
 targeting_module = NodePath("targeting_module")
 rotation_loss = 0.3
 rotation_loss_distance = 80
 dot_rotation_loss_guard = 0.0
-dot_rotation_loss_max = 0.3
+dot_rotation_loss_max = 0.1
 dot_loss_power = 1.5
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1449968798]
@@ -70,7 +72,6 @@ aim_at_next_pos = true
 projectile_speed_factor = 150.0
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=44983150]
-emitting = false
 amount = 100
 lifetime = 5.0
 visibility_aabb = AABB(-2000, -2000, -2000, 4000, 4000, 4000)
@@ -84,3 +85,9 @@ metadata/_custom_type_script = "uid://bpng540ygsvjm"
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox" unique_id=106798674]
 shape = SubResource("BoxShape3D_x05w2")
 debug_color = Color(0.93951267, 4.3317677e-06, 0.3278692, 1)
+
+[node name="ProjectileAttackHandler" type="Node3D" parent="." unique_id=1164018032 node_paths=PackedStringArray("root", "hitbox")]
+script = ExtResource("4_uo4qw")
+root = NodePath("..")
+hitbox = NodePath("../Hitbox")
+metadata/_custom_type_script = "uid://fok8v1b1rllw"

@@ -6,6 +6,9 @@
 [ext_resource type="Script" uid="uid://be0jh52rd15gj" path="res://scene/instantiable/player/MissileCounterMeasures.gd" id="3_8c50t"]
 [ext_resource type="Script" uid="uid://br2sexdynpvob" path="res://scripts/HealthManager.gd" id="3_i6rrb"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kykjf"]
+albedo_color = Color(1, 0, 0, 1)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_x05w2"]
 size = Vector3(1, 1, 3.1157227)
 
@@ -37,14 +40,17 @@ metadata/_custom_type_script = "uid://br2sexdynpvob"
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1543224469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0059509277, 0, -1.0155859)
+material_override = SubResource("StandardMaterial3D_kykjf")
 size = Vector3(0.604, 0.503, 3.246172)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1434819781]
 transform = Transform3D(1.3394789, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_kykjf")
 size = Vector3(2.7373047, 0.1928711, 1)
 
 [node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=1435558309]
 transform = Transform3D(0.8958891, 0, 0, 0, 0.59677994, 0, 0, 0, 0.65598476, 0, 0.132622, -2.1332)
+material_override = SubResource("StandardMaterial3D_kykjf")
 size = Vector3(2.7373047, 0.1928711, 1)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1769793321]

@@ -32,3 +32,4 @@ func on_projectile_hit_hurtbox (hurtbox:Hurtbox):
 		{}
 	)
 	target.apply_attack(atk_data)
+	applied_attack.emit()
