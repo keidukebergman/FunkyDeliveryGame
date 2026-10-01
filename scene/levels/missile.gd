@@ -6,7 +6,7 @@ class_name Missile extends RigidBody3D
 @export var rotation_speed:float = 1.0
 @export var targeting_module:TargetingModule
 @export var target:Node3D
-var tracking_loss_value = 0.98
+var tracking_loss_value = 0.7
 @export var should_PN_target = true
 @export var rotation_loss = 0.4
 @export var rotation_loss_distance = 30
@@ -19,6 +19,7 @@ var initialized = false
 func _ready() -> void:
 	initialized = true
 	projectile_attack_handler.applied_attack.connect(_on_hit)
+	projectile_attack_handler.hit_obstacle.connect(_on_hit)
 
 func set_target(target:Node3D):
 	self.target = target
@@ -78,7 +79,7 @@ func _PN_targeting(delta: float) -> void:
 	
 	linear_velocity = -transform.basis.z * movement_speed
 
-	if (target.global_position - global_position).dot(-transform.basis.z) < tracking_loss_value:
+	if (target.global_position - global_position).normalized().dot(-transform.basis.z) < tracking_loss_value:
 		var player_aircraft_controller = (target as PlayerAircraftController)
 		if player_aircraft_controller:
 			player_aircraft_controller.missile_warning_system.remove_target_lock(self)

@@ -20,16 +20,12 @@ func on_missile_lost(missile:Missile):
 	var missile_indicator_instance = missile_indicator_mapping.get(missile)
 	missile_indicator_mapping.erase(missile)
 	if missile_indicator_instance:
-		missile_indicator_instance.queue_free()
+		missile_indicator_instance.free()
 
 func _process(delta: float) -> void:
 	for missile in missile_indicator_mapping.keys():
-		var missile_indicator_instance = missile_indicator_mapping.get(missile)
-		missile_indicator_instance.visible = true
-		if !missile:
-			missile_indicator_instance.queue_free()
-			continue
-		missile_indicator
-		var missile_position = missile.position
-		var indicator = missile_indicator_mapping.get(missile) as Node3D
-		indicator.look_at(missile_position, Vector3.UP)
+		var indicator = missile_indicator_mapping[missile] as Node3D
+		indicator.look_at(missile.global_position, Vector3.UP)
+		indicator.visible = true
+		var scalefactor = 1 - clamp(global_position.distance_to(missile.global_position)/500, 0, 0.7)
+		indicator.get_child(0).scale = Vector3(scalefactor, scalefactor, scalefactor)

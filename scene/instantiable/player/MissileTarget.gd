@@ -10,5 +10,5 @@ func get_targeted(missile:Missile):
 	missile_detected.emit(missile)
 
 func remove_target_lock(missile:Missile):
-	tracking_missiles.erase(missile)
 	missile_lost.emit(missile)
+	tracking_missiles.erase(missile)

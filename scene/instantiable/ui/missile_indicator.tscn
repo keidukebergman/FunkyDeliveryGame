@@ -8,8 +8,3 @@
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.9411635)
 modulate = Color(0.8523005, 0, 0.21972227, 1)
 texture = ExtResource("1_x3yyg")
-
-[node name="Sprite3D2" type="Sprite3D" parent="Sprite3D" unique_id=14327590]
-transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -0.14524412)
-modulate = Color(0.3953672, 0.39536718, 0.39536715, 1)
-texture = ExtResource("1_x3yyg")

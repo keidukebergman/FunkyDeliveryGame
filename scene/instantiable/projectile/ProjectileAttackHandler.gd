@@ -7,6 +7,7 @@ class_name ProjectileAttackHandler extends Node3D
 @export var can_hit_hurtbox:bool = true
 
 signal applied_attack()
+signal hit_obstacle()
 
 func _ready() -> void:
 	hitbox.hit_entity.connect(on_hit_entity)
@@ -16,10 +17,9 @@ func on_hit_entity(entity):
 		on_projectile_hit_hurtbox(entity as Hurtbox)
 	else:
 		on_hit_obstacle()
-	get_parent_node_3d().queue_free()
 
 func on_hit_obstacle():
-	pass
+	hit_obstacle.emit()
 
 func on_projectile_hit_hurtbox (hurtbox:Hurtbox):
 	var target = hurtbox
