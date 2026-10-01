@@ -24,6 +24,9 @@ func set_target(target:Node3D):
 	self.target = target
 	targeting_module.target = target
 	missile_velocity = -transform.basis.z * movement_speed
+	var player_aircraft_controller = (target as PlayerAircraftController)
+	if player_aircraft_controller:
+		player_aircraft_controller.missile_warning_system.get_targeted(self)
 var nav_constant: float = 4 #3-5
 
 var missile_velocity: Vector3 = Vector3.ZERO
@@ -76,9 +79,15 @@ func _PN_targeting(delta: float) -> void:
 	linear_velocity = -transform.basis.z * movement_speed
 
 	if (target.global_position - global_position).dot(-transform.basis.z) < tracking_loss_value:
+		var player_aircraft_controller = (target as PlayerAircraftController)
+		if player_aircraft_controller:
+			player_aircraft_controller.missile_warning_system.remove_target_lock(self)
 		target = null
 
 
 func _on_hit():
+	var player_aircraft_controller = (target as PlayerAircraftController)
+	if player_aircraft_controller:
+		player_aircraft_controller.missile_warning_system.remove_target_lock(self)
 	print("hit!")
 	queue_free()

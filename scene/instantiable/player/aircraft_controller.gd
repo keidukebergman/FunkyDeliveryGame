@@ -1,4 +1,4 @@
-extends CharacterBody3D
+class_name PlayerAircraftController extends CharacterBody3D
 
 @export var data = CombatantData.new()
 @export_group("Control inertia")
@@ -49,6 +49,7 @@ var stall_speed = 50;
 
 @export_group("Local References")
 @export var countermeasures:MissileCountermeasure
+@export var missile_warning_system:MissileTarget
 
 func _process(delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up");
@@ -77,7 +78,6 @@ func calculate_flight_physics(delta: float) -> void:
 	actual_movement_speed = actual_movement_speed.move_toward(flight_speed, delta * interpolation_speed);
 	actual_hover_speed = actual_hover_speed.move_toward(Vector3.ZERO, delta*boost_movement_speed_interpolation)
 	if (actual_movement_speed.length() < stall_speed):
-		print("Stalling: ", actual_movement_speed.length(), " : ", stall_speed)
 		actual_fall_speed.y = max(actual_fall_speed.y, -99999)
 		actual_fall_speed.y = clamp(actual_fall_speed.y, -200, 0)
 		actual_fall_speed -= delta * 12 * Vector3.UP * clamp((stall_speed - actual_movement_speed.length())/stall_speed, 0, 1);

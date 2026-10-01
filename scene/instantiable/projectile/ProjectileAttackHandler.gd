@@ -2,7 +2,7 @@ class_name ProjectileAttackHandler extends Node3D
 
 @export var root:Node3D
 @export var hitbox:Hitbox
-@export var damage:float
+@export var damage:float = 10
 @export var can_hit_entity_once:bool = true
 @export var can_hit_hurtbox:bool = true
 

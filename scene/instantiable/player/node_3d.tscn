@@ -5,6 +5,9 @@
 [ext_resource type="Script" uid="uid://b1olin0wr7hu6" path="res://scripts/Hurtbox.gd" id="2_87d5p"]
 [ext_resource type="Script" uid="uid://be0jh52rd15gj" path="res://scene/instantiable/player/MissileCounterMeasures.gd" id="3_8c50t"]
 [ext_resource type="Script" uid="uid://br2sexdynpvob" path="res://scripts/HealthManager.gd" id="3_i6rrb"]
+[ext_resource type="Script" uid="uid://g4so46n4quxu" path="res://scene/instantiable/player/AttackRegistrator.gd" id="4_ynpty"]
+[ext_resource type="Script" uid="uid://bwpjpbt0cyfks" path="res://scene/instantiable/player/VisualWarningSystem.gd" id="6_ki6y5"]
+[ext_resource type="PackedScene" uid="uid://ci6m28wy542gl" path="res://scene/instantiable/ui/missile_indicator.tscn" id="7_mkgwn"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kykjf"]
 albedo_color = Color(1, 0, 0, 1)
@@ -15,13 +18,14 @@ size = Vector3(1, 1, 3.1157227)
 [sub_resource type="BoxShape3D" id="BoxShape3D_mtnme"]
 size = Vector3(3, 0.4, 2.644)
 
-[node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures")]
+[node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures", "missile_warning_system")]
 slide_on_ceiling = false
 script = ExtResource("1_k1gms")
 roll_speed = 1.0
 yaw_speed = 0.6
 yaw_inertia = 0.2
 countermeasures = NodePath("MissileCountermeasures")
+missile_warning_system = NodePath("MissileTarget")
 
 [node name="MissileTarget" type="Node3D" parent="." unique_id=1757459258]
 script = ExtResource("2_4v0pv")
@@ -30,13 +34,21 @@ script = ExtResource("2_4v0pv")
 script = ExtResource("3_8c50t")
 missile_target = NodePath("../MissileTarget")
 
-[node name="AttackRegistrator" type="Node3D" parent="." unique_id=965883723]
+[node name="AttackRegistrator" type="Node3D" parent="." unique_id=965883723 node_paths=PackedStringArray("health_manager", "hurtbox")]
+script = ExtResource("4_ynpty")
+health_manager = NodePath("../HealthManager")
+hurtbox = NodePath("../Hurtbox")
 
 [node name="HealthManager" type="Node3D" parent="." unique_id=1736362127]
 script = ExtResource("3_i6rrb")
 health = 50.0
 max_health = 50.0
 metadata/_custom_type_script = "uid://br2sexdynpvob"
+
+[node name="VisualWarningSystem" type="Node3D" parent="." unique_id=2140244012 node_paths=PackedStringArray("missile_target")]
+script = ExtResource("6_ki6y5")
+missile_target = NodePath("../MissileTarget")
+missile_indicator = ExtResource("7_mkgwn")
 
 [node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=1543224469]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0059509277, 0, -1.0155859)
