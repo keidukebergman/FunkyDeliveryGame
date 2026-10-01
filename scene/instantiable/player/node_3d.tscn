@@ -21,6 +21,8 @@ size = Vector3(3, 0.4, 2.644)
 [node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures", "missile_warning_system")]
 slide_on_ceiling = false
 script = ExtResource("1_k1gms")
+max_hover_speed = 60
+min_hover_speed = -50
 roll_speed = 1.0
 yaw_speed = 0.6
 yaw_inertia = 0.2

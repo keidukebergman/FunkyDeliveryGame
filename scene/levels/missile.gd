@@ -13,6 +13,7 @@ var tracking_loss_value = 0.7
 @export var dot_rotation_loss_guard = 0.5
 @export var dot_rotation_loss_max = 0.6
 @export var dot_loss_power = 1.25
+@export var life_time:float = 10.0
 
 var initialized = false
 
@@ -33,22 +34,12 @@ var nav_constant: float = 4 #3-5
 var missile_velocity: Vector3 = Vector3.ZERO
 
 func _physics_process(delta: float) -> void:
+	life_time -= delta
+	if life_time <= 0:
+		_on_hit()
 	if initialized:
 		if target:
-			if should_PN_target:
-				_PN_targeting(delta)
-				return
-			var target_position = targeting_module.get_linear_target_position()
-			var dir: Vector3 = (target_position - global_position).normalized()
-			if dir.length_squared() > 0.0:
-				var current_quat: Quaternion = global_transform.basis.get_rotation_quaternion()
-				var target_quat: Quaternion = Basis.looking_at(dir, Vector3.UP).get_rotation_quaternion()
-				var new_quat: Quaternion = current_quat.slerp(target_quat, delta * deg_to_rad(rotation_speed))
-				global_transform.basis = Basis(new_quat)
-			if (target.global_position - global_position).dot(-transform.basis.z) < tracking_loss_value:
-				print("forgor 💀")
-				target = null
-		linear_velocity = -transform.basis.z * movement_speed
+			_PN_targeting(delta)
 
 func _PN_targeting(delta: float) -> void:
 	if not target:
@@ -90,5 +81,4 @@ func _on_hit():
 	var player_aircraft_controller = (target as PlayerAircraftController)
 	if player_aircraft_controller:
 		player_aircraft_controller.missile_warning_system.remove_target_lock(self)
-	print("hit!")
 	queue_free()

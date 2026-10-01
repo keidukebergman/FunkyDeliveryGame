@@ -62,6 +62,7 @@ rotation_loss_distance = 80
 dot_rotation_loss_guard = 0.0
 dot_rotation_loss_max = 0.1
 dot_loss_power = 1.5
+life_time = 20.0
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=1449968798]
 size = Vector3(0.5, 0.5, 1)
