@@ -103,7 +103,7 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.06
 doppler_tracking = 2
 
 [node name="AA_HK-Bullet" type="Node3D" parent="." unique_id=520120313 node_paths=PackedStringArray("target", "turret", "targeting_module")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9999, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9999999, 0)
 script = ExtResource("3_mul6r")
 target = NodePath("../Aircraft")
 turret = NodePath("Turret")
@@ -130,7 +130,7 @@ projectile_speed_factor = 400.0
 script = ExtResource("6_lgk5j")
 
 [node name="AA_HK-Missille" type="Node3D" parent="." unique_id=425124501 node_paths=PackedStringArray("target", "turret", "targeting_module")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4039545, 3.5520673, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.4039545, 9999999, 0)
 script = ExtResource("8_3i5di")
 target = NodePath("../Aircraft")
 turret = NodePath("Turret")
@@ -160,3 +160,7 @@ script = ExtResource("6_lgk5j")
 [node name="Helicopter" type="Node3D" parent="." unique_id=1680117907]
 
 [node name="Drone" type="Node3D" parent="." unique_id=110794635]
+
+[node name="DeliveryInteractionArea" type="Node3D" parent="." unique_id=1889951930]
+
+[node name="Area3D" type="Area3D" parent="DeliveryInteractionArea" unique_id=775075774]

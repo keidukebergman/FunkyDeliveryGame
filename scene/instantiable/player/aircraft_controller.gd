@@ -51,7 +51,7 @@ var stall_speed = 50;
 @export var countermeasures:MissileCountermeasure
 @export var missile_warning_system:MissileTarget
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up");
 	if Input.is_action_pressed("throttle_up") && Input.is_action_pressed("throttle_down"):
 		if hover_mode_pressed == false:
@@ -103,8 +103,8 @@ func handle_hovering(delta:float) -> void:
 	else:
 		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, normal_movement_speed_interpolation*delta)    
 	
-	var hover_speed = (tilt_loss * Vector3.UP + hover_throttle*transform.basis.y + l_hov*Vector3.LEFT + f_hov*Vector3.FORWARD)
-	actual_hover_speed = actual_hover_speed.move_toward(hover_speed, hover_force*delta)
+	var hover_s = (tilt_loss * Vector3.UP + hover_throttle*transform.basis.y + l_hov*Vector3.LEFT + f_hov*Vector3.FORWARD)
+	actual_hover_speed = actual_hover_speed.move_toward(hover_s, hover_force*delta)
 	
 func start_falling(delta:float, factor:float) -> void:
 	actual_fall_speed.y = max(actual_fall_speed.y, velocity.y)
@@ -117,7 +117,7 @@ func handle_rotation(delta: float) -> void:
 	var roll_input = -Input.get_axis("roll_right", "roll_left")
 	var yaw_input = Input.get_axis("yaw_right", "yaw_left")
 	
-	var control_factor = 1 if throttle == 1 else (boost_control_factor if throttle == 2 else no_thrust_control_factor)
+	var control_factor = 1.0 if throttle == 1 else (boost_control_factor if throttle == 2 else no_thrust_control_factor)
 	
 	var speed_factor = clamp(actual_movement_speed.length()/90, 0, 1);
 	
@@ -125,8 +125,8 @@ func handle_rotation(delta: float) -> void:
 	current_roll_speed = move_toward(current_roll_speed, roll_input*roll_speed*control_factor, delta*roll_inertia);
 	current_yaw_speed = move_toward(current_yaw_speed, yaw_input*yaw_speed*control_factor, delta*yaw_inertia);
 	
-	var attitude_pitch_adjustment = abs(transform.basis.z.dot(Vector3.UP)/10)
-	var roll_pitch_adjustment = clamp(get_roll_adjustment()/10, 0, 0.2)
+	var attitude_pitch_adjustment = abs(transform.basis.z.dot(Vector3.UP) / 10)
+	var roll_pitch_adjustment = clamp(get_roll_adjustment() / 10, 0, 0.2)
 	var speed_pitch_adjustment = clamp(actual_movement_speed.project(transform.basis.y).length() / 1000, 0, 1);
 	
 	var pitch_adjustment = (speed_pitch_adjustment + attitude_pitch_adjustment + roll_pitch_adjustment) * speed_factor;
@@ -136,11 +136,9 @@ func handle_rotation(delta: float) -> void:
 		rotate_object_local(Vector3.FORWARD, current_roll_speed * roll_speed * delta)
 		rotate_object_local(Vector3.UP, current_yaw_speed * yaw_speed * delta)
 	else:
-		rotate_object_local(Vector3.RIGHT, (current_pitch_speed * pitch_speed) * delta + pitch_adjustment*delta)
+		rotate_object_local(Vector3.RIGHT, (current_pitch_speed * pitch_speed) * delta + pitch_adjustment * delta)
 		rotate_object_local(Vector3.FORWARD, current_roll_speed * roll_speed * delta)
 		rotate_object_local(Vector3.UP, current_yaw_speed * yaw_speed * delta)
-	
-
 
 func get_roll_adjustment() -> float:
 	var forward = -global_transform.basis.z

@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://bbl8d0vm2x06v"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_x05w2"]
+radius = 2.4941406
+
+[node name="DeliveryInteractionArea" type="Node3D" unique_id=652127440]
+
+[node name="Area3D" type="Area3D" parent="." unique_id=1278238217]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D" unique_id=269182677]
+shape = SubResource("CylinderShape3D_x05w2")
+debug_color = Color(0, 1, 0, 1)
