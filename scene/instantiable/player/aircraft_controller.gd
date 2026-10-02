@@ -17,6 +17,7 @@ var min_speed: float = 1
 @export var min_hover_speed = -30;
 var hover_interpolation_speed = 10;
 var hover_force = 40;
+var is_landing = false
 
 @export_group("Rotation Speeds")
 @export var no_thrust_control_factor = 1.5
@@ -50,6 +51,8 @@ var stall_speed = 50;
 @export_group("Local References")
 @export var countermeasures:MissileCountermeasure
 @export var missile_warning_system:MissileTarget
+@export var landing_gear:Area3D
+
 
 func _process(_delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up");
@@ -88,7 +91,13 @@ func calculate_flight_physics(delta: float) -> void:
 	
 func handle_hovering(delta:float) -> void:
 	actual_movement_speed = actual_movement_speed.move_toward(Vector3.ZERO, idle_movement_speed_interpolation*delta)
-	var hover_throttle = max_hover_speed if throttle == 2 else (target_hover_speed if throttle == 1 else min_hover_speed)  
+	var hover_throttle = max_hover_speed if throttle == 2 else (target_hover_speed if throttle == 1 else min_hover_speed) 
+	if is_landing:
+		if throttle == 2:
+			is_landing = false
+		else:
+			hover_throttle = min_hover_speed
+	 
 	var ams_projected_up = actual_movement_speed.project(transform.basis.y)
 	actual_movement_speed -= ams_projected_up
 	ams_projected_up = ams_projected_up.move_toward(Vector3.ZERO, hover_force * delta)
@@ -132,6 +141,8 @@ func handle_rotation(delta: float) -> void:
 	var pitch_adjustment = (speed_pitch_adjustment + attitude_pitch_adjustment + roll_pitch_adjustment) * speed_factor;
 	
 	if hovering:
+		if is_landing:
+			return
 		rotate_object_local(Vector3.RIGHT, current_pitch_speed * pitch_speed * delta)
 		rotate_object_local(Vector3.FORWARD, current_roll_speed * roll_speed * delta)
 		rotate_object_local(Vector3.UP, current_yaw_speed * yaw_speed * delta)
@@ -146,5 +157,7 @@ func get_roll_adjustment() -> float:
 	var world_up_projected = (Vector3.UP - forward * Vector3.UP.dot(forward)).normalized()
 	var dot = local_up.dot(world_up_projected)
 	dot = clamp(dot, 0.0, 1.0)
-	
 	return (1.0 - dot)
+
+func on_landing_gear_collision ():
+	pass

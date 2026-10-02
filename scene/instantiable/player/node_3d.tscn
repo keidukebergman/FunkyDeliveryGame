@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://g4so46n4quxu" path="res://scene/instantiable/player/AttackRegistrator.gd" id="4_ynpty"]
 [ext_resource type="Script" uid="uid://bwpjpbt0cyfks" path="res://scene/instantiable/player/VisualWarningSystem.gd" id="6_ki6y5"]
 [ext_resource type="PackedScene" uid="uid://ci6m28wy542gl" path="res://scene/instantiable/ui/missile_indicator.tscn" id="7_mkgwn"]
+[ext_resource type="Script" uid="uid://bv0eb4kicne2j" path="res://scene/instantiable/player/LandingGear.gd" id="9_03j0q"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kykjf"]
 albedo_color = Color(1, 0, 0, 1)
@@ -20,7 +21,7 @@ size = Vector3(3, 0.4, 2.644)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ix5x4"]
 
-[node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures", "missile_warning_system")]
+[node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures", "missile_warning_system", "landing_gear")]
 slide_on_ceiling = false
 script = ExtResource("1_k1gms")
 max_hover_speed = 60
@@ -30,6 +31,7 @@ yaw_speed = 0.6
 yaw_inertia = 0.2
 countermeasures = NodePath("MissileCountermeasures")
 missile_warning_system = NodePath("MissileTarget")
+landing_gear = NodePath("LandingGear")
 
 [node name="MissileTarget" type="Node3D" parent="." unique_id=1757459258]
 script = ExtResource("2_4v0pv")
@@ -87,6 +89,7 @@ shape = SubResource("BoxShape3D_mtnme")
 debug_color = Color(0, 1, 0.16862746, 1)
 
 [node name="LandingGear" type="Area3D" parent="." unique_id=2036885865]
+script = ExtResource("9_03j0q")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LandingGear" unique_id=714979117]
 shape = SubResource("BoxShape3D_ix5x4")

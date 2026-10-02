@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://crdjde2asekja" path="res://scene/levels/AggroManager.gd" id="6_lgk5j"]
 [ext_resource type="Script" uid="uid://dymytr6b250r4" path="res://scene/levels/MissileTurret.gd" id="8_3i5di"]
 [ext_resource type="PackedScene" uid="uid://bs7c50bgirlno" path="res://scene/instantiable/projectile/missile.tscn" id="9_kykjf"]
+[ext_resource type="PackedScene" uid="uid://bbl8d0vm2x06v" path="res://scene/instantiable/deliveries/delivery_interaction_area.tscn" id="10_m5tyu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5gkb"]
 sky_top_color = Color(0.22121674, 0.4322499, 0.807532, 1)
@@ -161,6 +162,4 @@ script = ExtResource("6_lgk5j")
 
 [node name="Drone" type="Node3D" parent="." unique_id=110794635]
 
-[node name="DeliveryInteractionArea" type="Node3D" parent="." unique_id=1889951930]
-
-[node name="Area3D" type="Area3D" parent="DeliveryInteractionArea" unique_id=775075774]
+[node name="DeliveryInteractionArea" parent="." unique_id=652127440 instance=ExtResource("10_m5tyu")]
