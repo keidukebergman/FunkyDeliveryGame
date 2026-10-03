@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://0cug437q8u8t"]
+
+[ext_resource type="Script" uid="uid://dv4daiqx174p3" path="res://scene/levels/aa_turret.gd" id="1_e24fb"]
+[ext_resource type="PackedScene" uid="uid://dawtkjmagnku3" path="res://scene/instantiable/projectile/bullet.tscn" id="2_2cctv"]
+[ext_resource type="Script" uid="uid://buk3gsfs72vvv" path="res://scene/levels/targeting_module.gd" id="3_glllw"]
+[ext_resource type="Script" uid="uid://crdjde2asekja" path="res://scene/levels/AggroManager.gd" id="4_mhha5"]
+
+[node name="AA_HK-Bullet" type="Node3D" unique_id=2013955689 node_paths=PackedStringArray("target", "turret", "targeting_module")]
+script = ExtResource("1_e24fb")
+target = NodePath("")
+turret = NodePath("Turret")
+targeting_module = NodePath("TargetingModule")
+projectile = ExtResource("2_2cctv")
+firing_timeout = 0.03
+airburst = false
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=202416268]
+
+[node name="Turret" type="Node3D" parent="." unique_id=920825517]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9502678, 0)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Turret" unique_id=1394393157]
+size = Vector3(0.4, 0.4, 1)
+
+[node name="TargetingModule" type="Node3D" parent="." unique_id=1299054199 node_paths=PackedStringArray("target")]
+script = ExtResource("3_glllw")
+target = NodePath("")
+aim_at_next_pos = true
+projectile_speed_factor = 400.0
+
+[node name="AggroManager" type="Node3D" parent="." unique_id=657835289]
+script = ExtResource("4_mhha5")

@@ -10,6 +10,8 @@ class_name MissileTurret
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if(!target):
+		return
 	var target_position = targeting_module.get_linear_target_position()
 	var dir: Vector3 = target_position - global_position
 	var yaw = atan2(-dir.x, -dir.z)
@@ -28,5 +30,4 @@ func fire_projectile():
 	add_child(projinstance)
 	projinstance.global_position = turret.global_position
 	projinstance.global_rotation = turret.global_rotation + Vector3(deg_to_rad(randf_range(-12, 12)), deg_to_rad(randf_range(-12, 12)), deg_to_rad(randf_range(-12, 12)))
-	print(target.get_child(0))
 	projinstance.set_target(target)

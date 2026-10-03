@@ -7,10 +7,10 @@ var attacking_hitbox : Hitbox
 var receiving_hurtbox : Hurtbox
 var effects : Dictionary
 
-func _init(damage, attacker, receiver, attacking_hitbox, receiving_hurtbox, effects):
-	self.damage = damage
-	self.attacker = attacker
-	self.receiver = receiver
-	self.attacking_hitbox = attacking_hitbox
-	self.receiving_hurtbox = receiving_hurtbox
-	self.effects = effects
+func _init(damage_value, attacker_value, receiver_value, attacking_hitbox_value, receiving_hurtbox_value, effects_value):
+	self.damage = damage_value
+	self.attacker = attacker_value
+	self.receiver = receiver_value
+	self.attacking_hitbox = attacking_hitbox_value
+	self.receiving_hurtbox = receiving_hurtbox_value
+	self.effects = effects_value

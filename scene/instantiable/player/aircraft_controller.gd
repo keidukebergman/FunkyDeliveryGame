@@ -1,4 +1,4 @@
-class_name PlayerAircraftController extends CharacterBody3D
+class_name PlayerAircraftController extends RigidBody3D
 
 @export var data = CombatantData.new()
 @export_group("Control inertia")
@@ -53,10 +53,11 @@ var stall_speed = 50;
 @export var missile_warning_system:MissileTarget
 @export var landing_gear:Area3D
 
+var throttle_level = 0
 
 func _process(_delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up");
-	if Input.is_action_pressed("throttle_up") && Input.is_action_pressed("throttle_down"):
+	if Input.is_action_just_pressed("hover_switch"):
 		if hover_mode_pressed == false:
 			hover_mode_pressed = true
 			hovering = !hovering
@@ -71,8 +72,8 @@ func _physics_process(delta: float) -> void:
 		calculate_flight_physics(delta)
 	else:
 		handle_hovering(delta);
-	velocity = actual_movement_speed + actual_fall_speed + actual_hover_speed;
-	move_and_slide()
+	linear_velocity = actual_movement_speed + actual_fall_speed + actual_hover_speed;
+	var pre_collision_velocity = linear_velocity
 
 func calculate_flight_physics(delta: float) -> void:
 	var forward_dir = -transform.basis.z
@@ -80,14 +81,12 @@ func calculate_flight_physics(delta: float) -> void:
 	var flight_speed = forward_dir * throttle * max_level_speed;
 	actual_movement_speed = actual_movement_speed.move_toward(flight_speed, delta * interpolation_speed);
 	actual_hover_speed = actual_hover_speed.move_toward(Vector3.ZERO, delta*boost_movement_speed_interpolation)
-	if (actual_movement_speed.length() < stall_speed):
-		actual_fall_speed.y = max(actual_fall_speed.y, -99999)
+	if (throttle == 0):
+		actual_fall_speed.y = max(actual_fall_speed.y, linear_velocity.y-actual_movement_speed.y)
 		actual_fall_speed.y = clamp(actual_fall_speed.y, -200, 0)
-		actual_fall_speed -= delta * 12 * Vector3.UP * clamp((stall_speed - actual_movement_speed.length())/stall_speed, 0, 1);
+		actual_fall_speed -= delta * 9 * Vector3.UP;
 	else:
 		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, normal_movement_speed_interpolation*delta)
-		if throttle != 0:
-			actual_fall_speed = Vector3.ZERO    
 	
 func handle_hovering(delta:float) -> void:
 	actual_movement_speed = actual_movement_speed.move_toward(Vector3.ZERO, idle_movement_speed_interpolation*delta)
@@ -116,7 +115,7 @@ func handle_hovering(delta:float) -> void:
 	actual_hover_speed = actual_hover_speed.move_toward(hover_s, hover_force*delta)
 	
 func start_falling(delta:float, factor:float) -> void:
-	actual_fall_speed.y = max(actual_fall_speed.y, velocity.y)
+	actual_fall_speed.y = max(actual_fall_speed.y, linear_velocity.y)
 	actual_fall_speed.y = clamp(actual_fall_speed.y, -200, 0)
 	actual_fall_speed -= delta * factor * 12 * Vector3.UP * clamp((stall_speed - actual_movement_speed.length())/stall_speed, 0, 1);
 
@@ -126,10 +125,9 @@ func handle_rotation(delta: float) -> void:
 	var roll_input = -Input.get_axis("roll_right", "roll_left")
 	var yaw_input = Input.get_axis("yaw_right", "yaw_left")
 	
-	var control_factor = 1.0 if throttle == 1 else (boost_control_factor if throttle == 2 else no_thrust_control_factor)
+	var control_factor = 1.0
 	
 	var speed_factor = clamp(actual_movement_speed.length()/90, 0, 1);
-	
 	current_pitch_speed = move_toward(current_pitch_speed, pitch_input*pitch_speed*control_factor, delta*pitch_inertia);
 	current_roll_speed = move_toward(current_roll_speed, roll_input*roll_speed*control_factor, delta*roll_inertia);
 	current_yaw_speed = move_toward(current_yaw_speed, yaw_input*yaw_speed*control_factor, delta*yaw_inertia);
@@ -161,3 +159,9 @@ func get_roll_adjustment() -> float:
 
 func on_landing_gear_collision ():
 	pass
+
+
+@export_group("Collision")
+@export var crash_speed_threshold: float = 20.0
+
+var _prev_velocity = Vector3.ZERO

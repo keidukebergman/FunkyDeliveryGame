@@ -22,10 +22,17 @@ func on_missile_lost(missile:Missile):
 	if missile_indicator_instance:
 		missile_indicator_instance.free()
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	for missile in missile_indicator_mapping.keys():
+		var dir:Vector3 = missile.global_position - global_position
+		if dir.is_zero_approx():
+			continue
+		dir = dir.normalized()
 		var indicator = missile_indicator_mapping[missile] as Node3D
-		indicator.look_at(missile.global_position, Vector3.UP)
+		var up = Vector3.UP
+		if dir.cross(up).length_squared() < 0.0001:
+			up = Vector3.FORWARD if absf(dir.dot(Vector3.FORWARD)) < 0.99 else Vector3.RIGHT
+		indicator.look_at(missile.global_position, up)
 		indicator.visible = true
 		var scalefactor = 1 - clamp(global_position.distance_to(missile.global_position)/500, 0, 0.7)
 		indicator.get_child(0).scale = Vector3(scalefactor, scalefactor, scalefactor)

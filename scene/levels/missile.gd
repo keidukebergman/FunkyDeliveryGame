@@ -22,11 +22,11 @@ func _ready() -> void:
 	projectile_attack_handler.applied_attack.connect(_on_hit)
 	projectile_attack_handler.hit_obstacle.connect(_on_hit)
 
-func set_target(target:Node3D):
-	self.target = target
-	targeting_module.target = target
+func set_target(target_value:Node3D):
+	self.target = target_value
+	targeting_module.target = target_value
 	missile_velocity = -transform.basis.z * movement_speed
-	var player_aircraft_controller = (target as PlayerAircraftController)
+	var player_aircraft_controller = (target_value as PlayerAircraftController)
 	if player_aircraft_controller:
 		player_aircraft_controller.missile_warning_system.get_targeted(self)
 var nav_constant: float = 4 #3-5

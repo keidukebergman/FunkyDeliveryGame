@@ -21,8 +21,7 @@ size = Vector3(3, 0.4, 2.644)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ix5x4"]
 
-[node name="Node3D" type="CharacterBody3D" unique_id=1079979286 node_paths=PackedStringArray("countermeasures", "missile_warning_system", "landing_gear")]
-slide_on_ceiling = false
+[node name="Node3D" type="RigidBody3D" unique_id=806266701 node_paths=PackedStringArray("countermeasures", "missile_warning_system", "landing_gear")]
 script = ExtResource("1_k1gms")
 max_hover_speed = 60
 min_hover_speed = -50

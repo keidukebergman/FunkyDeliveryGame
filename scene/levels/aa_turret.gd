@@ -12,6 +12,8 @@ class_name GunTurret
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
+	if(!target):
+		return
 	var target_position = targeting_module.get_linear_target_position()
 	var dir: Vector3 = target_position - global_position
 	var yaw = atan2(-dir.x, -dir.z)
