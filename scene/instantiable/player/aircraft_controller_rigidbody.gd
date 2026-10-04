@@ -23,6 +23,9 @@ var throttle_level: float = 1.0
 @export var hover_vertical_drag: float = 0.16
 @export var hover_horizontal_drag: float = 0.5
 @export var hover_max_force:float = 10000
+@export var vertical_kp: float = 4.0
+@export var hover_min_force: float = -2000
+@export var hover_deviation_tolerance: float = 0.45
 var is_landing = false
 
 @export_group("Rotation Speeds")
@@ -106,37 +109,27 @@ func apply_flight_forces(state: PhysicsDirectBodyState3D) -> void:
 	var total_local_accel = thrust_accel + drag_accel + lift_accel
 	state.apply_central_force(basis * total_local_accel * mass)
 
-@export var vertical_kp: float = 4.0
-@export var hover_min_force: float = -2000
-@export var hover_deviation_tolerance: float = 0.45
-
 func apply_hover_forces(state: PhysicsDirectBodyState3D) -> void:
 	var vel: Vector3 = state.linear_velocity
-	var up: Vector3 = transform.basis.y.normalized()
-	
-	var speed_up: float = vel.dot(Vector3.UP)
-	var vel_local_up: Vector3 = up * speed_up
-	var vel_horizontal: Vector3 = vel - vel_local_up;
+	var up: Vector3 = basis.y.normalized()
+	var up_dot: float = up.dot(Vector3.UP)
+	var gravity: float = state.total_gravity.length()
 
-	var gravity_along_down: float = -state.total_gravity.dot(up)
-	var target_speed_up: float = 0.0
+	var target_vy: float = _throttle_curve(
+		throttle_level, hover_low_target_velocity, 0.0, hover_high_target_velocity)
+	var accel_y: float = gravity + vertical_kp * (target_vy - vel.y)
 
-	match throttle:
-		0.0: 
-			target_speed_up = hover_low_target_velocity
-		1.0: 
-			target_speed_up = 0.0
-		2.0: 
-			target_speed_up = hover_high_target_velocity
+	var force: float = mass * accel_y / maxf(up_dot, 0.2)
+	force = clampf(force, hover_min_force, hover_max_force)
 
-	var accel_up: float = (target_speed_up - speed_up) * vertical_kp
-	var required_force: float = mass * (gravity_along_down + accel_up)
+	force *= clampf(up_dot, 0.0, 1.0)
+	state.apply_central_force(up * force)
 
-	var thrust: Vector3 = clampf(required_force, hover_min_force, hover_max_force) * up
-
-	var drag_accel: Vector3 = -(vel_horizontal * hover_horizontal_drag + vel_local_up * hover_vertical_drag)
-
-	state.apply_central_force(thrust + drag_accel * mass)
+	var drag_accel := -Vector3(
+		hover_horizontal_drag * vel.x,
+		hover_vertical_drag * vel.y,
+		hover_horizontal_drag * vel.z)
+	state.apply_central_force(drag_accel * mass)
 
 
 func apply_rotation_torque(state: PhysicsDirectBodyState3D) -> void:

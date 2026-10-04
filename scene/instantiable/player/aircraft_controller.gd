@@ -73,7 +73,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		handle_hovering(delta);
 	linear_velocity = actual_movement_speed + actual_fall_speed + actual_hover_speed;
-	var pre_collision_velocity = linear_velocity
 
 func calculate_flight_physics(delta: float) -> void:
 	var forward_dir = -transform.basis.z
@@ -163,5 +162,3 @@ func on_landing_gear_collision ():
 
 @export_group("Collision")
 @export var crash_speed_threshold: float = 20.0
-
-var _prev_velocity = Vector3.ZERO

@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="JobData" format=3 uid="uid://cr46vix6iiyh4"]
+
+[ext_resource type="Script" uid="uid://dnqulr6gq77ud" path="res://scripts/Data/JobData.gd" id="1_ltpf0"]
+
+[resource]
+script = ExtResource("1_ltpf0")
+title = "Pizza Delivery"
+long_description = "A pizza is in need of being delivered. You have to deliver pizza. Deliver a pizza or two. Maybe three.
+Yee."
+short_description = "A pizza has to be delivered"
+metadata/_custom_type_script = "uid://dnqulr6gq77ud"
