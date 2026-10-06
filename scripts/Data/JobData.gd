@@ -15,7 +15,6 @@ class_name JobData extends Resource
 
 @export_group("Reward")
 @export var base_reward: int = 100
-@export var bonus_for_speed: int = 0
 
 @export_group("Misc")
 @export var cargo: PackedScene

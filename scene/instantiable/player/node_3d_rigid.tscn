@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://caijirtamwc8"]
 
 [ext_resource type="Script" uid="uid://7jg1qo5civf0" path="res://scene/instantiable/player/aircraft_controller_rigidbody.gd" id="1_qwjoj"]
+[ext_resource type="Script" uid="uid://dbcmdoafalwye" path="res://scene/instantiable/player/FuelTracker.gd" id="2_fga8j"]
 [ext_resource type="Script" uid="uid://0f173b8nkb76" path="res://scene/instantiable/player/MissileTarget.gd" id="2_hkxe2"]
 [ext_resource type="Script" uid="uid://be0jh52rd15gj" path="res://scene/instantiable/player/MissileCounterMeasures.gd" id="3_fga8j"]
 [ext_resource type="Script" uid="uid://g4so46n4quxu" path="res://scene/instantiable/player/AttackRegistrator.gd" id="4_5nftf"]
@@ -26,6 +27,9 @@ script = ExtResource("1_qwjoj")
 countermeasures = NodePath("MissileCountermeasures")
 missile_warning_system = NodePath("MissileTarget")
 landing_gear = NodePath("LandingGear")
+
+[node name="FuelTracker" type="Node3D" parent="." unique_id=167045235]
+script = ExtResource("2_fga8j")
 
 [node name="MissileTarget" type="Node3D" parent="." unique_id=1950829988]
 script = ExtResource("2_hkxe2")
