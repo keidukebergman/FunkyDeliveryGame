@@ -49,9 +49,11 @@ var _prev_velocity = Vector3.ZERO
 @export var countermeasures: MissileCountermeasure
 @export var missile_warning_system: MissileTarget
 @export var landing_gear: Area3D
-
+@export var fuel_tracker: FuelTracker
+var fuel_depleted = false
 
 func _ready() -> void:
+	fuel_tracker.fuel_depleted.connect(on_fuel_depleted)
 	linear_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
 	angular_damp_mode = RigidBody3D.DAMP_MODE_REPLACE
 	linear_damp = 0.0
@@ -60,14 +62,23 @@ func _ready() -> void:
 	contact_monitor = true
 	max_contacts_reported = 4
 
+func on_fuel_depleted ():
+	fuel_depleted = true
+	hovering = true
+	throttle = 0
 
 func _process(_delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up")
+	if fuel_depleted:
+		return
 	if Input.is_action_just_pressed("hover_switch"):
 		hovering = not hovering
 	else:
-		throttle = clampf(throttle_input + 1.0, 0.0, 2.0)
-
+		throttle = round(clampf(throttle_input + 1.0, 0.0, 2.0))
+		if throttle == 2.0:
+			fuel_tracker.set_fuel_depletion_rate(FuelTracker.FuelDrainRate.HIGH)
+		else:
+			fuel_tracker.set_fuel_depletion_rate(FuelTracker.FuelDrainRate.MEDIUM)
 
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	check_crash(state)
@@ -84,7 +95,6 @@ func _throttle_curve(level: float, at_0: float, at_1: float, at_2: float) -> flo
 		return lerpf(at_0, at_1, level)
 	return lerpf(at_1, at_2, level - 1.0)
 
-
 func apply_flight_forces(state: PhysicsDirectBodyState3D) -> void:
 	var gravity = state.total_gravity.length()
 	var local_velocity = basis.transposed() * state.linear_velocity
@@ -93,14 +103,13 @@ func apply_flight_forces(state: PhysicsDirectBodyState3D) -> void:
 	var boost_thrust = forward_drag * boost_speed * boost_speed
 	var thrust = _throttle_curve(throttle_level, 0.0, cruise_thrust, boost_thrust)
 	var thrust_accel = Vector3(0.0, 0.0, -thrust) 
-
 	var drag_accel = 5 * -Vector3(
 		side_drag * local_velocity.x * absf(local_velocity.x),
 		vertical_drag * local_velocity.y * absf(local_velocity.y),
 		forward_drag * local_velocity.z * absf(local_velocity.z))
 
 	if throttle == 0:
-		drag_accel /= 3
+		return
 
 	var forward_airspeed = maxf(-local_velocity.z, 0.0)
 	var lift_ratio = clampf(pow(forward_airspeed / stall_speed, 2.0), 0.0, 1.0)

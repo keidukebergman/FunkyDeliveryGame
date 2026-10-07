@@ -1,7 +1,7 @@
 class_name FuelTracker extends Node3D
 
 @export var max_fuel:float
-var current_fuel:float
+var current_fuel:float = 10
 var current_fuel_drain_rate:float
 @export var is_draining_fuel:bool = true
 @export var fuel_drain_rate_low:float
@@ -16,7 +16,7 @@ enum FuelDrainRate {
 }
 signal fuel_depleted
 
-func ready():
+func _ready():
 	current_fuel = max_fuel
 
 
@@ -26,6 +26,7 @@ func _process(delta):
 		if(current_fuel < 0):
 			is_draining_fuel = false
 			fuel_depleted.emit()
+			print("fuel depleted")
 
 func set_fuel_depletion_rate(rate:FuelDrainRate):
 	match rate:

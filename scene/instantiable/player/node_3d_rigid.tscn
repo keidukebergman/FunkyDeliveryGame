@@ -22,14 +22,20 @@ size = Vector3(3, 0.4, 2.644)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_nruuu"]
 
-[node name="Node3D2" type="RigidBody3D" unique_id=382606159 node_paths=PackedStringArray("countermeasures", "missile_warning_system", "landing_gear")]
+[node name="Node3D2" type="RigidBody3D" unique_id=382606159 node_paths=PackedStringArray("countermeasures", "missile_warning_system", "landing_gear", "fuel_tracker")]
+gravity_scale = 1.3
 script = ExtResource("1_qwjoj")
 countermeasures = NodePath("MissileCountermeasures")
 missile_warning_system = NodePath("MissileTarget")
 landing_gear = NodePath("LandingGear")
+fuel_tracker = NodePath("FuelTracker")
 
 [node name="FuelTracker" type="Node3D" parent="." unique_id=167045235]
 script = ExtResource("2_fga8j")
+max_fuel = 120.0
+fuel_drain_rate_low = 1.0
+fuel_drain_rate = 1.0
+fuel_drain_rate_high = 3.0
 
 [node name="MissileTarget" type="Node3D" parent="." unique_id=1950829988]
 script = ExtResource("2_hkxe2")
