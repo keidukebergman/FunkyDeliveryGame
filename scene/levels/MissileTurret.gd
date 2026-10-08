@@ -1,13 +1,16 @@
 extends Node3D
 class_name MissileTurret
 
-@export var target:CharacterBody3D
+@export var target:Node3D
 @export var turret:Node3D
 @export var rotation_speed = 30
 @export var targeting_module:TargetingModule
 @export var projectile:PackedScene
 @export var firing_timeout = 0.6
 
+func _ready() -> void:
+	if target:
+		targeting_module.target = target
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if(!target):

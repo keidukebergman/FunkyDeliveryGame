@@ -54,8 +54,8 @@ size = Vector3(0.4, 0.4, 1)
 gravity_scale = 0.0
 script = ExtResource("1_wcfkk")
 projectile_attack_handler = NodePath("ProjectileAttackHandler")
-movement_speed = 180
-rotation_speed = 8.0
+movement_speed = 220
+rotation_speed = 15.0
 targeting_module = NodePath("targeting_module")
 rotation_loss = 0.3
 rotation_loss_distance = 80
@@ -80,6 +80,7 @@ process_material = SubResource("ParticleProcessMaterial_x05w2")
 draw_pass_1 = SubResource("QuadMesh_mtnme")
 
 [node name="Hitbox" type="Area3D" parent="." unique_id=1121789763]
+physics_interpolation_mode = 1
 script = ExtResource("3_s0k68")
 metadata/_custom_type_script = "uid://bpng540ygsvjm"
 

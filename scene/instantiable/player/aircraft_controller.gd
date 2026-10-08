@@ -6,10 +6,15 @@ class_name PlayerAircraftController extends RigidBody3D
 var throttle = 0; 
 
 @export_group("Base Flight Parameters")
-var min_speed: float = 1
+var min_speed: float = 30
 @export var max_level_speed: float = 60.0
 @export var engine_power: float = 20.0
 @export var base_drag: float = 5.0
+@export var acceleration: float = 100
+@export var deceleration: float = 100
+var flight_airspeed:float = 0
+@export var acceleration_curve: Curve
+@export var deceleration_curve: Curve
 
 @export_group("Hover")
 @export var max_hover_speed = 30;
@@ -40,9 +45,8 @@ var actual_fall_speed: Vector3
 var hover_speed: Vector3
 
 @export_group("Force Interpolation")
-var idle_movement_speed_interpolation: float = 10
-@export var normal_movement_speed_interpolation: float = 70
-@export var boost_movement_speed_interpolation: float = 120
+@export var movement_speed_interpolaton_factor: float = 10
+@export var hover_speed_interpolation: float = 20
 
 var hovering:bool = false;
 var hover_mode_pressed = false;
@@ -54,6 +58,9 @@ var stall_speed = 50;
 @export var landing_gear:Area3D
 
 var throttle_level = 0
+
+func _ready():
+	movement_speed_interpolaton_factor *= max_level_speed
 
 func _process(_delta: float) -> void:
 	var throttle_input = Input.get_axis("throttle_down", "throttle_up");
@@ -74,21 +81,19 @@ func _physics_process(delta: float) -> void:
 		handle_hovering(delta);
 	linear_velocity = actual_movement_speed + actual_fall_speed + actual_hover_speed;
 
+func _evaluate_acc_decc_curve(curve:Curve, amplitude:float, speed:float, max_speed:float) -> float:
+	return curve.sample(speed/max_speed) * amplitude
+
 func calculate_flight_physics(delta: float) -> void:
+	var accdecc = _evaluate_acc_decc_curve(acceleration_curve, acceleration, flight_airspeed, max_level_speed*2) if throttle * max_level_speed > flight_airspeed else _evaluate_acc_decc_curve(deceleration_curve, deceleration, flight_airspeed, max_level_speed*2)
+	flight_airspeed = move_toward(flight_airspeed, max(throttle * max_level_speed, 0.3*max_level_speed), delta * accdecc)
 	var forward_dir = -transform.basis.z
-	var interpolation_speed = boost_movement_speed_interpolation if throttle == 2 else (normal_movement_speed_interpolation if throttle == 1 else idle_movement_speed_interpolation)
-	var flight_speed = forward_dir * throttle * max_level_speed;
-	actual_movement_speed = actual_movement_speed.move_toward(flight_speed, delta * interpolation_speed);
-	actual_hover_speed = actual_hover_speed.move_toward(Vector3.ZERO, delta*boost_movement_speed_interpolation)
-	if (throttle == 0):
-		actual_fall_speed.y = max(actual_fall_speed.y, linear_velocity.y-actual_movement_speed.y)
-		actual_fall_speed.y = clamp(actual_fall_speed.y, -200, 0)
-		actual_fall_speed -= delta * 9 * Vector3.UP;
-	else:
-		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, normal_movement_speed_interpolation*delta)
+	var flight_speed = forward_dir * flight_airspeed
+	actual_movement_speed = actual_movement_speed.move_toward(flight_speed, delta * movement_speed_interpolaton_factor)
+	actual_hover_speed = actual_hover_speed.move_toward(Vector3.ZERO, delta * movement_speed_interpolaton_factor)
 	
 func handle_hovering(delta:float) -> void:
-	actual_movement_speed = actual_movement_speed.move_toward(Vector3.ZERO, idle_movement_speed_interpolation*delta)
+	actual_movement_speed = actual_movement_speed.move_toward(Vector3.ZERO, hover_speed_interpolation * delta)
 	var hover_throttle = max_hover_speed if throttle == 2 else (target_hover_speed if throttle == 1 else min_hover_speed) 
 	if is_landing:
 		if throttle == 2:
@@ -108,7 +113,7 @@ func handle_hovering(delta:float) -> void:
 	if updot < 0.2:
 		start_falling(delta, -(updot-0.2))
 	else:
-		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, normal_movement_speed_interpolation*delta)    
+		actual_fall_speed = actual_fall_speed.move_toward(Vector3.ZERO, hover_speed_interpolation*delta)    
 	
 	var hover_s = (tilt_loss * Vector3.UP + hover_throttle*transform.basis.y + l_hov*Vector3.LEFT + f_hov*Vector3.FORWARD)
 	actual_hover_speed = actual_hover_speed.move_toward(hover_s, hover_force*delta)

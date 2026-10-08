@@ -46,7 +46,7 @@ func _PN_targeting(delta: float) -> void:
 		return
 
 	var target_pos: Vector3 = target.global_position
-	var target_vel: Vector3 = target.velocity  
+	var target_vel: Vector3 = target.linear_velocity  
 	var los: Vector3 = target_pos - global_position      
 	var los_len_sq: float = los.length_squared()
 

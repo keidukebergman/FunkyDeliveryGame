@@ -4,19 +4,15 @@ class_name JobData extends Resource
 @export_multiline var long_description: String
 @export var short_description: String
 
-@export_group("Locations")
-@export var pickup_location: Array
-@export var dropoff_location: Array
-
-@export_group("Timing")
-@export var has_time_limit: bool = false
-@export var starts_timer_on_pickup = true
-@export_range(30.0, 1800.0, 1.0, "suffix:s") var time_limit: float = 120.0
+@export_group("Objectives")
+@export var custom_job_outline: bool = false
+@export var job_outline = null
+@export var pickup_location = Location
+@export var delivery_location = Location
 
 @export_group("Reward")
 @export var base_reward: int = 100
 
-@export_group("Misc")
-@export var cargo: PackedScene
-@export var tags: Array[StringName] = [] 
-@export var can_be_removed:bool = true
+@export_group("Tags") 
+@export var persistent:bool = false
+@export var one_time_completable:bool = false

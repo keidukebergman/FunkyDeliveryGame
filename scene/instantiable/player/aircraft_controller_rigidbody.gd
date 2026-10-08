@@ -3,12 +3,13 @@ class_name PlayerAircraftControllerRig extends RigidBody3D
 @export var data = CombatantData.new()
 
 @export_group("Control inertia")
-@export var throttle_increase_per_second: float = 2.0
+@export var throttle_increase_per_second: float = 0.3
 var throttle: float = 1.0
 var throttle_level: float = 1.0
 
 @export_group("Base Flight Parameters")
-@export var max_level_speed: float = 60.0
+@export var min_level_speed: float = 80.0
+@export var max_level_speed: float = 100.0
 @export var boost_speed_multiplier: float = 1.5
 @export var stall_speed: float = 40.0
 @export var forward_drag: float = 0.005
@@ -98,18 +99,16 @@ func _throttle_curve(level: float, at_0: float, at_1: float, at_2: float) -> flo
 func apply_flight_forces(state: PhysicsDirectBodyState3D) -> void:
 	var gravity = state.total_gravity.length()
 	var local_velocity = basis.transposed() * state.linear_velocity
+	var min_thrust = forward_drag * min_level_speed * min_level_speed
 	var cruise_thrust = forward_drag * max_level_speed * max_level_speed
 	var boost_speed = max_level_speed * boost_speed_multiplier
 	var boost_thrust = forward_drag * boost_speed * boost_speed
-	var thrust = _throttle_curve(throttle_level, 0.0, cruise_thrust, boost_thrust)
+	var thrust = _throttle_curve(throttle, min_thrust, cruise_thrust, boost_thrust)
 	var thrust_accel = Vector3(0.0, 0.0, -thrust) 
-	var drag_accel = 5 * -Vector3(
+	var drag_accel = -Vector3(
 		side_drag * local_velocity.x * absf(local_velocity.x),
 		vertical_drag * local_velocity.y * absf(local_velocity.y),
 		forward_drag * local_velocity.z * absf(local_velocity.z))
-
-	if throttle == 0:
-		return
 
 	var forward_airspeed = maxf(-local_velocity.z, 0.0)
 	var lift_ratio = clampf(pow(forward_airspeed / stall_speed, 2.0), 0.0, 1.0)

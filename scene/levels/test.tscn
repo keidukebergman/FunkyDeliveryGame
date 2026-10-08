@@ -3,6 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://bjbxd22a1md3a" path="res://icon.svg" id="1_2mwat"]
 [ext_resource type="Script" uid="uid://ckhhiltvipahw" path="res://scene/levels/JobHandler.gd" id="1_h5gkb"]
 [ext_resource type="PackedScene" uid="uid://caijirtamwc8" path="res://scene/instantiable/player/node_3d_rigid.tscn" id="1_kykjf"]
+[ext_resource type="PackedScene" uid="uid://cephtpdf2eueo" path="res://scene/instantiable/player/node_3d.tscn" id="1_xe2e6"]
+[ext_resource type="PackedScene" uid="uid://nyiyhmw6fkwp" path="res://scene/instantiable/enemies/aa_hk_missille.tscn" id="6_lgk5j"]
 [ext_resource type="PackedScene" uid="uid://bbl8d0vm2x06v" path="res://scene/instantiable/deliveries/delivery_interaction_area.tscn" id="10_m5tyu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_h5gkb"]
@@ -21,6 +23,14 @@ sky = SubResource("Sky_mul6r")
 
 [sub_resource type="Compositor" id="Compositor_ix5x4"]
 
+[sub_resource type="Curve" id="Curve_xe2e6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5341615, 0.6160715), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.83636343, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Curve" id="Curve_lgk5j"]
+_data = [Vector2(0, 0.16071439), 0.0, -0.09375005, 0, 0, Vector2(1, 1), 0.71874976, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kn7c7"]
 albedo_texture = ExtResource("1_2mwat")
 
@@ -38,9 +48,13 @@ compositor = SubResource("Compositor_ix5x4")
 transform = Transform3D(1, 0, 0, 0, -0.5893197, 0.80789995, 0, -0.80789995, -0.5893197, 0, 0, 0)
 
 [node name="Node3D2" parent="." unique_id=382606159 instance=ExtResource("1_kykjf")]
+visible = false
 mass = 1000.0
 max_level_speed = 200.0
 boost_speed_multiplier = 2.0
+forward_drag = 0.025
+side_drag = 0.15
+vertical_drag = 0.05
 hover_high_target_velocity = 30
 hover_low_target_velocity = -15
 hover_low_thrust_factor = 0.1
@@ -54,6 +68,18 @@ roll_speed = 2.3
 yaw_speed = 0.3
 pitch_response = 2.0
 yaw_response = 1.0
+
+[node name="Node3D" parent="." unique_id=806266701 instance=ExtResource("1_xe2e6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.824013, 0, 0)
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
+max_level_speed = 120.0
+acceleration = 150.0
+deceleration = 80.0
+acceleration_curve = SubResource("Curve_xe2e6")
+deceleration_curve = SubResource("Curve_lgk5j")
+pitch_speed = 1.0
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=209417441]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 1.0619507, 362.32907, -127.89849)
@@ -351,3 +377,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 356.0715, -47.382652, -345.16
 material_override = SubResource("StandardMaterial3D_kn7c7")
 use_collision = true
 size = Vector3(300, 1, 300)
+
+[node name="AA_HK-Missille" parent="." unique_id=1075759552 node_paths=PackedStringArray("target") instance=ExtResource("6_lgk5j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -112.3152, 10.720879, -687.67114)
+target = NodePath("../Node3D")
