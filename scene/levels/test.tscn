@@ -71,9 +71,8 @@ yaw_response = 1.0
 
 [node name="Node3D" parent="." unique_id=806266701 instance=ExtResource("1_xe2e6")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.824013, 0, 0)
-axis_lock_angular_x = true
-axis_lock_angular_y = true
-axis_lock_angular_z = true
+mass = 1000.0
+gravity_scale = 0.0
 max_level_speed = 120.0
 acceleration = 150.0
 deceleration = 80.0

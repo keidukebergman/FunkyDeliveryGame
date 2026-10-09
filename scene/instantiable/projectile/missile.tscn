@@ -28,7 +28,7 @@ direction = Vector3(0, 0, 0)
 gravity = Vector3(0, 0.08, 0)
 use_scale_3d = true
 scale_3d_min = Vector3(0.1, 0.1, 0.1)
-scale_3d_max = Vector3(0.1, 0.1, 0.1)
+scale_3d_max = Vector3(0.2, 0.2, 0.2)
 scale_max = 178.22
 scale_curve = SubResource("CurveTexture_wcfkk")
 alpha_curve = SubResource("CurveTexture_s0k68")
@@ -51,7 +51,10 @@ size = Vector2(100, 100)
 size = Vector3(0.4, 0.4, 1)
 
 [node name="Missile" type="RigidBody3D" unique_id=1547750135 node_paths=PackedStringArray("projectile_attack_handler", "targeting_module")]
+physics_interpolation_mode = 1
+mass = 3000.0
 gravity_scale = 0.0
+continuous_cd = true
 script = ExtResource("1_wcfkk")
 projectile_attack_handler = NodePath("ProjectileAttackHandler")
 movement_speed = 220
@@ -73,7 +76,7 @@ aim_at_next_pos = true
 projectile_speed_factor = 150.0
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=44983150]
-amount = 100
+amount = 400
 lifetime = 5.0
 visibility_aabb = AABB(-2000, -2000, -2000, 4000, 4000, 4000)
 process_material = SubResource("ParticleProcessMaterial_x05w2")
